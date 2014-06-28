@@ -2,6 +2,8 @@
  * Created by Mopk
  * on 2014-06-24 10:12.
  */
+package mopk;
+
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
