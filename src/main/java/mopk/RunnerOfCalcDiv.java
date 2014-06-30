@@ -5,6 +5,7 @@
 package mopk;
 
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -22,54 +23,84 @@ public class RunnerOfCalcDiv {
         List<String> outputAndErrorLines = new ArrayList<String>();
 
         try {
-            Process process =
-                    Runtime.getRuntime().exec("./external/calc_div.exe");
 
-            BufferedWriter writerToInputOfExternalApplication =
-                    new BufferedWriter(
-                            new OutputStreamWriter(process.getOutputStream())
-                    );
-            writerToInputOfExternalApplication.write(
-                    dividend
-            );
-            writerToInputOfExternalApplication.newLine();
-            writerToInputOfExternalApplication.write(
-                    divisor
-            );
-//            writerToInputOfExternalApplication.newLine();
-            writerToInputOfExternalApplication.flush();
-            writerToInputOfExternalApplication.close();
+            BufferedWriter writerToInputOfExternalApplication = null;
+            Scanner readerOfOutputOfExternalApplication = null;
+            Scanner readerOfErrorsOfExternalApplication = null;
 
-            Scanner readerOfOutputOfExternalApplication =
-                    new Scanner(
-                            new InputStreamReader(process.getInputStream())
-                    );
-            Scanner readerOfErrorsOfExternalApplication =
-                    new Scanner(
-                            new InputStreamReader(process.getErrorStream())
-                    );
+            try {
+                Process process =
+                        Runtime.getRuntime().exec("./external/calc_div.exe");
 
-            String outputLine;
-            while (readerOfOutputOfExternalApplication.hasNextLine() == true) {
-                outputLine = readerOfOutputOfExternalApplication.nextLine();
-                outputAndErrorLines.add(outputLine);
-                System.out.println(outputLine);
+                writerToInputOfExternalApplication =
+                        new BufferedWriter(
+                                new OutputStreamWriter(
+                                        process.getOutputStream()
+                                )
+                        );
+                writerToInputOfExternalApplication.write(
+                        dividend
+                );
+                writerToInputOfExternalApplication.newLine();
+                writerToInputOfExternalApplication.write(
+                        divisor
+                );
+                //            writerToInputOfExternalApplication.newLine();
+                writerToInputOfExternalApplication.flush();
+                writerToInputOfExternalApplication.close(); // necessary
+
+                readerOfOutputOfExternalApplication =
+                        new Scanner(
+                                new InputStreamReader(
+                                        process.getInputStream()
+                                )
+                        );
+                readerOfErrorsOfExternalApplication =
+                        new Scanner(
+                                new InputStreamReader(
+                                        process.getErrorStream()
+                                )
+                        );
+
+                String outputLine;
+                while (readerOfOutputOfExternalApplication.hasNextLine()
+                        ==
+                        true) {
+                    outputLine = readerOfOutputOfExternalApplication.nextLine();
+                    outputAndErrorLines.add(outputLine);
+                    System.out.println(outputLine);
+                }
+//                readerOfOutputOfExternalApplication.close();
+
+                String errorLine;
+                while (readerOfErrorsOfExternalApplication.hasNextLine()
+                        ==
+                        true) {
+                    errorLine = readerOfErrorsOfExternalApplication.nextLine();
+                    outputAndErrorLines.add(errorLine);
+                    System.out.println(errorLine);
+                }
+//                readerOfErrorsOfExternalApplication.close();
+
+                process.waitFor();
+                System.out.println("Done.");
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            } finally {
+                if (writerToInputOfExternalApplication != null) {
+                    writerToInputOfExternalApplication.close();
+                }
+                if (readerOfOutputOfExternalApplication != null) {
+                    readerOfOutputOfExternalApplication.close();
+                }
+                if (readerOfErrorsOfExternalApplication != null) {
+                    readerOfErrorsOfExternalApplication.close();
+                }
             }
-            readerOfOutputOfExternalApplication.close();
 
-            String errorLine;
-            while (readerOfErrorsOfExternalApplication.hasNextLine() == true) {
-                errorLine = readerOfErrorsOfExternalApplication.nextLine();
-                outputAndErrorLines.add(errorLine);
-                System.out.println(errorLine);
-            }
-            readerOfErrorsOfExternalApplication.close();
-
-            process.waitFor();
-            System.out.println("Done.");
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
 
         return outputAndErrorLines;
