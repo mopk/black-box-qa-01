@@ -7,12 +7,20 @@ package mopk;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class RunnerOfCalcDiv {
 
+
     @SuppressWarnings("PointlessBooleanExpression")
-    public static void main(String[] args) {
+    static public List<String> runCalcDiv(
+            String dividend,
+            String divisor
+    ) {
+        List<String> outputAndErrorLines = new ArrayList<String>();
+
         try {
             Process process =
                     Runtime.getRuntime().exec("./external/calc_div.exe");
@@ -22,11 +30,11 @@ public class RunnerOfCalcDiv {
                             new OutputStreamWriter(process.getOutputStream())
                     );
             writerToInputOfExternalApplication.write(
-                    "2"
+                    dividend
             );
             writerToInputOfExternalApplication.newLine();
             writerToInputOfExternalApplication.write(
-                    "3"
+                    divisor
             );
 //            writerToInputOfExternalApplication.newLine();
             writerToInputOfExternalApplication.flush();
@@ -44,6 +52,7 @@ public class RunnerOfCalcDiv {
             String outputLine;
             while (readerOfOutputOfExternalApplication.hasNextLine() == true) {
                 outputLine = readerOfOutputOfExternalApplication.nextLine();
+                outputAndErrorLines.add(outputLine);
                 System.out.println(outputLine);
             }
             readerOfOutputOfExternalApplication.close();
@@ -51,6 +60,7 @@ public class RunnerOfCalcDiv {
             String errorLine;
             while (readerOfErrorsOfExternalApplication.hasNextLine() == true) {
                 errorLine = readerOfErrorsOfExternalApplication.nextLine();
+                outputAndErrorLines.add(errorLine);
                 System.out.println(errorLine);
             }
             readerOfErrorsOfExternalApplication.close();
@@ -61,5 +71,13 @@ public class RunnerOfCalcDiv {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+
+        return outputAndErrorLines;
     }
+
+
+    static public void main(String[] args) {
+        runCalcDiv("2", "3");
+    }
+
 }
