@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Scanner;
 
-public class Draft {
+public class RunnerOfCalcDiv {
 
     @SuppressWarnings("PointlessBooleanExpression")
     public static void main(String[] args) {
