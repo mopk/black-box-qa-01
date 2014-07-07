@@ -25,5 +25,9 @@
         <module name="black-box-qa-01" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="black-box-qa-01" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
 </project>
+
