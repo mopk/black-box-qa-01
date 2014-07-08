@@ -4,14 +4,20 @@
  */
 package mopk;
 
+import mopk.data_access.TestCaseData;
+import mopk.data_access.TestCaseRepository;
 import org.apache.commons.math3.util.Precision;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class ApplicationActualTest {
+@ContextConfiguration(classes = Application.class)
+public class ApplicationActualTest extends AbstractTestNGSpringContextTests {
 
 
     /**
@@ -50,6 +56,22 @@ public class ApplicationActualTest {
     @SuppressWarnings("UnnecessaryLocalVariable")
     @DataProvider(name = "a")
     public Object[][] fetchParametersForPrecisionTest() {
+        List<TestCaseData> precisionTestCases = repository.findAll();
+        Object[][] parameters = new Object[precisionTestCases.size()][2];
+
+        for (int i = 0; i < parameters.length; i++) {
+            TestCaseData precisionTestCase = precisionTestCases.get(i);
+            parameters[i][0] =
+                    Float.parseFloat(
+                            precisionTestCase.getDividend()
+                    );
+            parameters[i][1] =
+                    Float.parseFloat(
+                            precisionTestCase.getDivisor()
+                    );
+        }
+
+/*
         Object[][] parameters =
                 new Object[][]{
                         { 32.1f, 3.7f },
@@ -68,6 +90,7 @@ public class ApplicationActualTest {
                         // изменена в соответствии со спецификацией тестируемой
                         // программы (см. протокол ручного тестирования)
                 };
+*/
         return parameters;
     }
 
@@ -87,4 +110,9 @@ public class ApplicationActualTest {
     //      - при уточнении спецификации, если будет необходимо, реализовать
     //      покрытие тестами циклов (управляющего потока) ввода параметров
     //      (гл. 4, Бейзер)
+
+
+    @Autowired
+    private TestCaseRepository repository;
+
 }
