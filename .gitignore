@@ -1,4 +1,5 @@
 #out/*
+db/data/*
 target/*
 .idea/workspace.xml
 .idea/libraries/*
