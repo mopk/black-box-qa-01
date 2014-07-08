@@ -19,7 +19,7 @@ public class Application implements CommandLineRunner {
     @Autowired
     private TestCaseRepository repository;
 
-    public static void main(String[] args) {
+    static public void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 

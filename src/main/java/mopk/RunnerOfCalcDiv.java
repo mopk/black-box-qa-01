@@ -63,9 +63,9 @@ public class RunnerOfCalcDiv {
                         );
 
                 String outputLine;
-                while (readerOfOutputOfExternalApplication.hasNextLine()
-                        ==
-                        true) {
+                while ( readerOfOutputOfExternalApplication.hasNextLine()
+                             ==
+                            true ) {
                     outputLine = readerOfOutputOfExternalApplication.nextLine();
                     outputAndErrorLines.add(outputLine);
                     System.out.println(outputLine);
@@ -73,9 +73,9 @@ public class RunnerOfCalcDiv {
 //                readerOfOutputOfExternalApplication.close();
 
                 String errorLine;
-                while (readerOfErrorsOfExternalApplication.hasNextLine()
-                        ==
-                        true) {
+                while ( readerOfErrorsOfExternalApplication.hasNextLine()
+                             ==
+                            true ) {
                     errorLine = readerOfErrorsOfExternalApplication.nextLine();
                     outputAndErrorLines.add(errorLine);
                     System.out.println(errorLine);
